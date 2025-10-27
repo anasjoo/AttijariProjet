@@ -1,0 +1,8 @@
+Cher client {client_id},
+Nous avons détecté une transaction inhabituelle sur votre compte :
+• Montant : {montant} TND
+• Date : {date}
+• Type : {type}
+
+Merci de vérifier si cette opération vous semble conforme.
+Si vous n’êtes pas à l’origine de cette transaction, contactez-nous immédiatement.

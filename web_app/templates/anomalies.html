@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Anomalies détectées - Attijari Analytics{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Liste des anomalies détectées - Attijari Analytics</h1>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour au tableau de bord
+        </a>
+    </div>
+
+    {% if anomalies %}
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Client ID</th>
+                            <th>Date</th>
+                            <th>Montant</th>
+                            <th>Type de transaction</th>
+                            <th>Description de l'anomalie</th>
+                            <th>Niveau de risque</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for anomaly in anomalies %}
+                        <tr>
+                            <td>{{ anomaly.client_id }}</td>
+                            <td>{{ anomaly.date }}</td>
+                            <td>{{ "%.2f"|format(anomaly.montant) }} €</td>
+                            <td>{{ anomaly.type_transaction }}</td>
+                            <td>{{ anomaly.description }}</td>
+                            <td>
+                                <span class="badge badge-{{ 'danger' if anomaly.niveau_risque == 'high' else 'warning' if anomaly.niveau_risque == 'medium' else 'info' }}">
+                                    {{ anomaly.niveau_risque }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('client_detail', client_id=anomaly.client_id) }}" class="btn btn-sm btn-primary">
+                                    Voir client
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Aucune anomalie détectée pour le moment.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Saisie Manuelle - Attijari Analytics{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Saisie Manuelle de Données Client</h1>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour au tableau de bord
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Formulaire de saisie</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('manual_entry_submit') }}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="client_id">ID du Client *</label>
+                                    <input type="text" class="form-control" id="client_id" name="client_id" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="montant">Montant de la Transaction (TND) *</label>
+                                    <input type="number" step="0.01" class="form-control" id="montant" name="montant" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="revenu_mensuel">Revenu Mensuel (TND) *</label>
+                                    <input type="number" step="0.01" class="form-control" id="revenu_mensuel" name="revenu_mensuel" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="age">Âge *</label>
+                                    <input type="number" class="form-control" id="age" name="age" min="18" max="100" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="pays">Pays</label>
+                                    <input type="text" class="form-control" id="pays" name="pays" value="TN">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="destination">Destination</label>
+                                    <input type="text" class="form-control" id="destination" name="destination">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nb_transactions_7j">Transactions 7 derniers jours</label>
+                                    <input type="number" class="form-control" id="nb_transactions_7j" name="nb_transactions_7j" value="1">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="montant_moyen_7j">Montant moyen 7 derniers jours</label>
+                                    <input type="number" step="0.01" class="form-control" id="montant_moyen_7j" name="montant_moyen_7j" value="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Détecter l'anomalie
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            {% if result %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Résultat de la détection</h5>
+                </div>
+                <div class="card-body">
+                    {% if result.is_anomaly %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i>
+                            <strong>✅ Manual entry processed: Anomalie détectée</strong>
+                        </div>
+                        <p><strong>Confiance:</strong> {{ "%.2f"|format(result.confidence * 100) }}%</p>
+                        
+                        {% if result.anomaly_details %}
+                        <h6>Détails:</h6>
+                        <ul>
+                        {% for detail in result.anomaly_details %}
+                            <li>{{ detail.type_anomalie }} - {{ detail.description }}</li>
+                        {% endfor %}
+                        </ul>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i>
+                            <strong>✅ Manual entry processed: Aucune anomalie détectée</strong>
+                        </div>
+                        <p><strong>Confiance:</strong> {{ "%.2f"|format(result.confidence * 100) }}%</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,264 @@
+/* Attijari Bank color variables and overrides for web_app */
+
+:root {
+    --attijari-primary: #e95e4a;
+    --attijari-secondary: #eb6a58;
+    --attijari-yellow: #f8b618;
+    --attijari-dark: #1A1A1A;
+    --attijari-gray: #f8f9fa;
+    --attijari-text: #333333;
+    --attijari-border: #e9ecef;
+    --attijari-danger: #d43f1a;
+    --attijari-info: #6c757d;
+}
+
+body {
+    background-color: var(--attijari-gray);
+    color: var(--attijari-text);
+}
+
+.navbar {
+    background-color: var(--attijari-primary) !important;
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link {
+    color: white !important;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: var(--attijari-secondary) !important;
+}
+
+.btn-primary {
+    background-color: var(--attijari-primary);
+    border-color: var(--attijari-primary);
+    color: var(--attijari-dark);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--attijari-secondary);
+    border-color: var(--attijari-secondary);
+    color: var(--attijari-dark);
+}
+
+.badge-primary {
+    background-color: var(--attijari-primary);
+    color: var(--attijari-dark);
+}
+
+.badge-primary:hover {
+    background-color: var(--attijari-secondary);
+    color: var(--attijari-dark);
+}
+
+/* Comprehensive Bootstrap overrides to remove blues/greens */
+
+/* Primary (was blue) -> Orange */
+.bg-primary {
+    background-color: var(--attijari-primary) !important;
+}
+.text-primary {
+    color: var(--attijari-primary) !important;
+}
+.border-primary {
+    border-color: var(--attijari-primary) !important;
+}
+.btn-primary {
+    background-color: var(--attijari-primary) !important;
+    border-color: var(--attijari-primary) !important;
+}
+.btn-primary:hover {
+    background-color: var(--attijari-secondary) !important;
+    border-color: var(--attijari-secondary) !important;
+}
+.badge-primary {
+    background-color: var(--attijari-primary) !important;
+}
+
+/* Success (was green) -> Yellow */
+.bg-success {
+    background-color: var(--attijari-yellow) !important;
+}
+.text-success {
+    color: var(--attijari-yellow) !important;
+}
+.border-success {
+    border-color: var(--attijari-yellow) !important;
+}
+.btn-success {
+    background-color: var(--attijari-yellow) !important;
+    border-color: var(--attijari-yellow) !important;
+    color: var(--attijari-dark) !important;
+}
+.btn-success:hover {
+    background-color: #f9c039 !important; /* Lighter yellow */
+    border-color: #f9c039 !important;
+    color: var(--attijari-dark) !important;
+}
+.badge-success {
+    background-color: var(--attijari-yellow) !important;
+    color: var(--attijari-dark) !important;
+}
+
+/* Warning (yellow already, but ensure consistency) */
+.bg-warning {
+    background-color: var(--attijari-yellow) !important;
+}
+.text-warning {
+    color: var(--attijari-yellow) !important;
+}
+.border-warning {
+    border-color: var(--attijari-yellow) !important;
+}
+.btn-warning {
+    background-color: var(--attijari-yellow) !important;
+    border-color: var(--attijari-yellow) !important;
+    color: var(--attijari-dark) !important;
+}
+.btn-warning:hover {
+    background-color: #f9c039 !important;
+    border-color: #f9c039 !important;
+    color: var(--attijari-dark) !important;
+}
+.badge-warning {
+    background-color: var(--attijari-yellow) !important;
+    color: var(--attijari-dark) !important;
+}
+
+/* Info (was cyan) -> Gray */
+.bg-info {
+    background-color: var(--attijari-info) !important;
+}
+.text-info {
+    color: var(--attijari-info) !important;
+}
+.border-info {
+    border-color: var(--attijari-info) !important;
+}
+.btn-info {
+    background-color: var(--attijari-info) !important;
+    border-color: var(--attijari-info) !important;
+    color: white !important;
+}
+.btn-info:hover {
+    background-color: #5a6268 !important; /* Darker gray */
+    border-color: #5a6268 !important;
+    color: white !important;
+}
+.badge-info {
+    background-color: var(--attijari-info) !important;
+    color: white !important;
+}
+
+/* Danger (was red) -> Darker Orange */
+.bg-danger {
+    background-color: var(--attijari-danger) !important;
+}
+.text-danger {
+    color: var(--attijari-danger) !important;
+}
+.border-danger {
+    border-color: var(--attijari-danger) !important;
+}
+.btn-danger {
+    background-color: var(--attijari-danger) !important;
+    border-color: var(--attijari-danger) !important;
+    color: white !important;
+}
+.btn-danger:hover {
+    background-color: #c33715 !important; /* Even darker */
+    border-color: #c33715 !important;
+    color: white !important;
+}
+.badge-danger {
+    background-color: var(--attijari-danger) !important;
+    color: white !important;
+}
+
+/* Secondary (gray) */
+.bg-secondary {
+    background-color: #6c757d !important;
+}
+.btn-secondary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white !important;
+}
+.badge-secondary {
+    background-color: #6c757d !important;
+    color: white !important;
+}
+
+/* Light and Dark */
+.bg-light {
+    background-color: var(--attijari-gray) !important;
+}
+.bg-dark {
+    background-color: var(--attijari-dark) !important;
+    color: white !important;
+}
+
+/* Table hovers with orange tint */
+.table-hover tbody tr:hover {
+    background-color: rgba(233, 94, 74, 0.1) !important; /* Tint of primary orange */
+}
+
+/* Card overrides for better contrast */
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid var(--attijari-border);
+    background-color: white;
+}
+
+.card-header {
+    background-color: var(--attijari-primary) !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+/* Ensure text contrast on colored backgrounds */
+.text-white {
+    color: white !important;
+}
+
+.text-dark {
+    color: var(--attijari-dark) !important;
+}
+
+/* Utility styles */
+.navbar-brand {
+    font-weight: bold;
+}
+
+.badge {
+    font-size: 0.875em;
+}
+
+.btn-group-sm > .btn, .btn-sm {
+    margin: 0 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+}
+
+/* Fixed logo in top-left corner */
+.logo-fixed {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1050; /* Above navbar */
+    width: 40px;
+    height: 40px;
+}
+
+/* Add padding to navbar to avoid overlap with fixed logo */
+.navbar .container-fluid {
+    padding-left: 60px;
+}

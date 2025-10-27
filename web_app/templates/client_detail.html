@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Attijari Analytics - Détails Client - {{ client.nom }} {{ client.prenom }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Détails du client: {{ client.nom }} {{ client.prenom }}</h1>
+    <a href="{{ url_for('clients') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Retour à la liste
+    </a>
+</div>
+
+<!-- Client Information -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Informations du client</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <td><strong>ID Client:</strong></td>
+                        <td>{{ client.client_id }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nom:</strong></td>
+                        <td>{{ client.nom }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Prénom:</strong></td>
+                        <td>{{ client.prenom }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Profession:</strong></td>
+                        <td>{{ client.profession }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Revenu mensuel:</strong></td>
+                        <td>{{ client.revenu_mensuel }} TND</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date de naissance:</strong></td>
+                        <td>{{ client.date_naissance }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">Statistiques</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Total transactions:</strong> {{ transactions|length }}</p>
+                <p><strong>Anomalies détectées:</strong> {{ anomalies|length }}</p>
+                <p><strong>Taux d'anomalies:</strong> 
+                    {% if transactions|length > 0 %}
+                        {{ ((anomalies|length / transactions|length) * 100)|round(2) }}%
+                    {% else %}
+                        0%
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Transactions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="card-title mb-0">Transactions récentes</h5>
+            </div>
+            <div class="card-body">
+                {% if transactions %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Montant</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions[:10] %}
+                            <tr>
+                                <td>{{ transaction.date }}</td>
+                                <td>{{ transaction.type_transaction }}</td>
+                                <td>{{ transaction.montant }} TND</td>
+                                <td>{{ transaction.description }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>Aucune transaction trouvée pour ce client.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Anomalies -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="card-title mb-0">Anomalies détectées</h5>
+            </div>
+            <div class="card-body">
+                {% if anomalies %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type d'anomalie</th>
+                                <th>Montant</th>
+                                <th>Niveau de risque</th>
+                                <th>Explication</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for anomaly in anomalies %}
+                            <tr>
+                                <td>{{ anomaly.date }}</td>
+                                <td>{{ anomaly.type_anomalie }}</td>
+                                <td>{{ anomaly.montant }} TND</td>
+                                <td>
+                                    <span class="badge bg-{{ 'danger' if anomaly.niveau_risque == 'élevé' else 'warning' if anomaly.niveau_risque == 'moyen' else 'success' }}">
+                                        {{ anomaly.niveau_risque }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" onclick="getExplanation('{{ client.client_id }}')">
+                                        <i class="fas fa-info-circle"></i> Explication
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>Aucune anomalie détectée pour ce client.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LLM Explanation Modal -->
+<div class="modal fade" id="explanationModal" tabindex="-1" aria-labelledby="explanationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="explanationModalLabel">Explication LLM</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="explanationContent">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Chargement...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function getExplanation(clientId) {
+    fetch(`/api/explain_anomaly/${clientId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('explanationContent').innerHTML = 
+                `<p>${data.explanation || 'Aucune explication disponible.'}</p>`;
+            new bootstrap.Modal(document.getElementById('explanationModal')).show();
+        })
+        .catch(error => {
+            document.getElementById('explanationContent').innerHTML = 
+                `<p class="text-danger">Erreur: ${error.message}</p>`;
+            new bootstrap.Modal(document.getElementById('explanationModal')).show();
+        });
+}
+</script>
+{% endblock %}

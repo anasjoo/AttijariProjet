@@ -1,0 +1,9 @@
+Client {client_id} — Profession : {profession} — Revenu mensuel : {revenu} TND
+Transaction suspecte :
+• Montant : {montant} TND
+• Date : {date}
+• Type : {type}
+• Lieu : {lieu}
+• Canal : {canal}
+
+Explique en langage clair pourquoi cette transaction semble inhabituelle au vu du profil du client.

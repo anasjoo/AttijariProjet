@@ -1,0 +1,6 @@
+Client {client_id} — Profession : {profession} — Revenu mensuel : {revenu} TND
+Nombre total de transactions : {nb_transactions}
+Moyenne mensuelle : {montant_moyen} TND
+Écart-type : {montant_ecart} TND
+
+Résume en quelques phrases le profil financier de ce client. Mentionne s’il est épargnant, dépensier, stable…
