@@ -56,7 +56,7 @@ jobs:
 
       - name: Clean App Service before deploy
         run: |
-          az webapp restart --name attijari-detection-2025 --resource-group <your-resource-group>
+          az webapp restart --name attijari-detection-2025 --resource-group AnomalieDetection
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
@@ -64,4 +64,5 @@ jobs:
           app-name: 'attijari-detection-2025'
           package: python-app.zip
           startup-command: 'gunicorn --bind 0.0.0.0 --timeout 600 --chdir web_app app:app'
+
 
