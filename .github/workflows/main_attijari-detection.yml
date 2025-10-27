@@ -73,4 +73,5 @@ jobs:
         with:
           app-name: 'attijari-detection'
           slot-name: 'Production'
+          startup-command: 'gunicorn --chdir web_app app:app'
           
