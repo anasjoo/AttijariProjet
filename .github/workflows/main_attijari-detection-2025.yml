@@ -9,7 +9,7 @@ on:
 permissions:
   id-token: write
   contents: read
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,7 +29,8 @@ jobs:
 
       - name: Archive app for deployment
         run: |
-          zip -r python-app.zip . -x ".venv/*" "*.git*" "tests/*"
+          # Exclude virtual environments, git, tests, and large folders
+          zip -r python-app.zip . -x ".venv/*" "*.git*" "tests/*" "data/*" "output/*"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -53,12 +54,10 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2525B71322BC4B78B772AC130B9F9EDF }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8C9B4EFA9B8B430396D7B542F6F787A1 }}
 
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'attijari-detection-2025'
           package: python-app.zip
-          startup-command: 'gunicorn --chdir web_app app:app'
-
-
+          # Gunicorn command assumes your Flask app is in web_app/app.py and variable is 'app'
+          startup-command: 'gunicorn --bind 0.0.0.0 --timeout 600 --chdir web_app app:app'
