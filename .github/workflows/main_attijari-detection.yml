@@ -72,7 +72,7 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: 'attijari-detection'
-          startup-command: 'python web_app\app.py'
-          
+          startup-command: 'gunicorn --chdir web_app app:app'
+
 
 
