@@ -29,8 +29,8 @@ jobs:
 
       - name: Archive app for deployment
         run: |
-          # Exclude virtual environments, git, tests, and large folders
-          zip -r python-app.zip . -x ".venv/*" "*.git*" "tests/*" "data/*" "output/*"
+          # Only include your application folder (web_app) and backend
+          zip -r python-app.zip web_app Backend -x "*.git*" "*.venv*" "tests/*" "data/*" "output/*"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -50,14 +50,17 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D8ADD3C781EE4EB4B316683CBC2E0003 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2525B71322BC4B78B772AC130B9F9EDF }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8C9B4EFA9B8B430396D7B542F6F787A1 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+
+      - name: Clean App Service before deploy
+        run: |
+          az webapp restart --name attijari-detection-2025 --resource-group <your-resource-group>
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'attijari-detection-2025'
           package: python-app.zip
-          # Gunicorn command assumes your Flask app is in web_app/app.py and variable is 'app'
           startup-command: 'gunicorn --bind 0.0.0.0 --timeout 600 --chdir web_app app:app'
