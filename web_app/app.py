@@ -13,7 +13,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Backend'))
 
 # --- NEW: Import Data from Azure Blob Storage Utility ---
-from azure_utils import clients_df, transactions_df, full_df 
+from azure_utils import clients_df, transactions_df, full_df
 # -----------------------------------------------------
 
 from anomaly_detector_complete import BankingAnomalyDetector

@@ -10,10 +10,21 @@ import sys
 # Using environment variables (os.environ.get('VAR_NAME')) is STRONGLY recommended for production.
 STORAGE_ACCOUNT_NAME = "datasetdetection"
 CONTAINER_NAME = "datasets"
-# This key is sensitive! For production, use Azure Key Vault or Managed Identity.
-STORAGE_ACCOUNT_KEY = "" 
-CONNECTION_STRING = f"DefaultEndpointsProtocol=https;AccountName={STORAGE_ACCOUNT_NAME};AccountKey={STORAGE_ACCOUNT_KEY};EndpointSuffix=core.windows.net"
 
+# Get the key from the environment variable set during the Docker build or App Service runtime.
+# Use a default value (like an empty string) if the variable isn't found to avoid errors 
+# during casual local testing without the key.
+STORAGE_ACCOUNT_KEY = os.environ.get(
+    "BLOB_STORAGE_KEY", 
+    "PLACEHOLDER_KEY_FOR_LOCAL_DEV" # This placeholder ensures the app compiles locally
+) 
+
+# Only connect if the key is actually present (i.e., not the placeholder)
+if STORAGE_ACCOUNT_KEY and STORAGE_ACCOUNT_KEY != "PLACEHOLDER_KEY_FOR_LOCAL_DEV":
+    CONNECTION_STRING = f"DefaultEndpointsProtocol=https;AccountName={STORAGE_ACCOUNT_NAME};AccountKey={STORAGE_ACCOUNT_KEY};EndpointSuffix=core.windows.net"
+else:
+    # If the key is missing, set a dummy connection string to prevent immediate crashes
+    CONNECTION_STRING = "DUMMY_CONNECTION_STRING"
 def load_df_from_blob(file_name: str) -> pd.DataFrame:
     """Loads a Pandas DataFrame directly from Azure Blob Storage."""
     
