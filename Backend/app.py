@@ -1,3 +1,5 @@
+# Backend/app.py (Updated for Blob Storage)
+
 """
 API FastAPI de production pour la détection d'anomalies bancaires
 avec intégration LLM
@@ -10,25 +12,27 @@ import uvicorn
 from datetime import datetime
 from typing import Optional, List, Dict
 import os
+import sys
+
+# Append the current directory (Backend) to path for imports
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# --- NEW: Import Data from Azure Blob Storage Utility ---
+from azure_utils import clients_df, full_df 
+# -----------------------------------------------------
 
 from anomaly_detector_complete import BankingAnomalyDetector
 from banking_llm_simple import BankingLLM
 
-# Initialiser l'application FastAPI
 app = FastAPI(
     title="Banking Anomaly Detection API",
     description="API de production pour la détection d'anomalies bancaires avec LLM",
     version="1.0.0"
 )
 
-# Initialiser les composants
 detector = BankingAnomalyDetector()
 llm = BankingLLM()
 
-# Charger les données au démarrage
-clients_df = pd.read_csv('../datasets/fake_clients.csv')
-transactions_df = pd.read_csv('../datasets/fake_transactions.csv')
-full_df = transactions_df.merge(clients_df, on='client_id', how='left')
 
 @app.get("/")
 async def root():

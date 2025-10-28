@@ -1,3 +1,5 @@
+# web_app/app.py (Updated for Blob Storage)
+
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 import pandas as pd
 import numpy as np
@@ -7,12 +9,16 @@ import json
 import sys
 
 # Add Backend directory to path for imports
+# This is necessary to import azure_utils, anomaly_detector_complete, etc.
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Backend'))
+
+# --- NEW: Import Data from Azure Blob Storage Utility ---
+from azure_utils import clients_df, transactions_df, full_df 
+# -----------------------------------------------------
 
 from anomaly_detector_complete import BankingAnomalyDetector
 from banking_llm_simple import BankingLLM
 from manual_anomaly_detector import ManualAnomalyDetector
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 
@@ -28,10 +34,7 @@ def get_llm():
         llm = BankingLLM()
     return llm
 
-# Load data
-clients_df = pd.read_csv('../datasets/fake_clients.csv')
-transactions_df = pd.read_csv('../datasets/fake_transactions.csv')
-full_df = transactions_df.merge(clients_df, on='client_id', how='left')
+
 
 # Initialize manual detector with training data
 def initialize_manual_detector():
